@@ -148,6 +148,33 @@
     50% { opacity: 0.2; }
   }
 
+  .sw3-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 32px;
+    background: linear-gradient(135deg, var(--accent1), #7b61ff);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(0,229,255,0.3);
+  }
+
+  .sw3-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,229,255,0.4);
+  }
+
+  .sw3-button:active {
+    transform: translateY(0);
+  }
+
   /* ── SECTION TITLES ── */
   .section-header {
     display: flex;
@@ -659,6 +686,7 @@
     </h1>
     <p class="header-sub">A tactical breakdown to help you win a 24-hour national hackathon</p>
     <div class="timer-bar">24-HOUR HACKATHON · PRIORITIZE DEMO OVER PERFECTION</div>
+    <button class="sw3-button" onclick="window.location.href='sw3.html'">View SW-3 Blueprint</button>
   </header>
 
   <!-- ── QUICK VERDICT ── -->
