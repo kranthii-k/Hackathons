@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPECTRE Hackathon — Winning Strategy Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080a0f;
+    --surface: #0d1117;
+    --surface2: #161b22;
+    --border: #21262d;
+    --accent1: #00e5ff;
+    --accent2: #ff6b35;
+    --accent3: #a8ff78;
+    --accent4: #ffd60a;
+    --text: #e6edf3;
+    --text-muted: #7d8590;
+    --rank1: #00e5ff;
+    --rank2: #a8ff78;
+    --rank3: #ff6b35;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Animated background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Glow orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.12;
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 20s ease-in-out infinite;
+  }
+  .orb1 { width: 500px; height: 500px; background: var(--accent1); top: -100px; left: -100px; animation-delay: 0s; }
+  .orb2 { width: 400px; height: 400px; background: var(--accent2); bottom: -100px; right: -100px; animation-delay: -7s; }
+  .orb3 { width: 300px; height: 300px; background: #9b59b6; top: 50%; left: 50%; animation-delay: -14s; }
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -20px) scale(1.05); }
+    66% { transform: translate(-20px, 30px) scale(0.95); }
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 60px 0 40px;
+    text-align: center;
+    position: relative;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent1);
+    border: 1px solid rgba(0,229,255,0.3);
+    padding: 4px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+    background: rgba(0,229,255,0.05);
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(38px, 6vw, 72px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  h1 .line1 { color: var(--text); }
+  h1 .line2 {
+    background: linear-gradient(90deg, var(--accent1), #7b61ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-sub {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+  }
+
+  .timer-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255,107,53,0.1);
+    border: 1px solid rgba(255,107,53,0.3);
+    color: var(--accent2);
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  .timer-bar::before {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent2);
+    animation: blink 1s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.2; }
+  }
+
+  .sw3-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 32px;
+    background: linear-gradient(135deg, var(--accent1), #7b61ff);
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(0,229,255,0.3);
+  }
+
+  .sw3-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,229,255,0.4);
+  }
+
+  .sw3-button:active {
+    transform: translateY(0);
+  }
+
+  /* ── SECTION TITLES ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-top: 60px;
+  }
+
+  .section-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    min-width: 36px;
+  }
+
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* ── VERDICT STRIP ── */
+  .verdict-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 48px;
+  }
+
+  .verdict-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+  }
+
+  .verdict-card:hover { transform: translateY(-2px); }
+  .verdict-card.rank-1 { border-color: rgba(0,229,255,0.4); }
+  .verdict-card.rank-2 { border-color: rgba(168,255,120,0.4); }
+  .verdict-card.rank-3 { border-color: rgba(255,107,53,0.4); }
+
+  .verdict-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .rank-1::before { background: var(--rank1); }
+  .rank-2::before { background: var(--rank2); }
+  .rank-3::before { background: var(--rank3); }
+
+  .rank-badge {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .rank-1 .rank-badge { color: var(--rank1); }
+  .rank-2 .rank-badge { color: var(--rank2); }
+  .rank-3 .rank-badge { color: var(--rank3); }
+
+  .verdict-id {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .verdict-name {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* ── PROBLEM CARD ── */
+  .problem-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 40px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .problem-card.p1 { border-top: 3px solid var(--rank1); }
+  .problem-card.p2 { border-top: 3px solid var(--rank2); }
+  .problem-card.p3 { border-top: 3px solid var(--rank3); }
+
+  .card-header {
+    padding: 28px 32px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .card-header-left { flex: 1; }
+
+  .problem-id-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+  }
+  .p1 .problem-id-tag { background: rgba(0,229,255,0.1); color: var(--rank1); border: 1px solid rgba(0,229,255,0.2); }
+  .p2 .problem-id-tag { background: rgba(168,255,120,0.1); color: var(--rank2); border: 1px solid rgba(168,255,120,0.2); }
+  .p3 .problem-id-tag { background: rgba(255,107,53,0.1); color: var(--rank3); border: 1px solid rgba(255,107,53,0.2); }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .card-tagline {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .score-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 160px;
+  }
+
+  .score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    font-size: 11px;
+  }
+
+  .score-label { color: var(--text-muted); }
+
+  .score-bar-wrap {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .score-bar {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+  .p1 .score-bar { background: var(--rank1); }
+  .p2 .score-bar { background: var(--rank2); }
+  .p3 .score-bar { background: var(--rank3); }
+
+  .score-val {
+    font-size: 11px;
+    font-weight: 600;
+    min-width: 28px;
+    text-align: right;
+  }
+  .p1 .score-val { color: var(--rank1); }
+  .p2 .score-val { color: var(--rank2); }
+  .p3 .score-val { color: var(--rank3); }
+
+  /* Card body sections */
+  .card-body { padding: 32px; }
+
+  .subsection {
+    margin-bottom: 28px;
+  }
+
+  .subsection-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .subsection-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Architecture diagram */
+  .arch-flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 16px 0;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    overflow-x: auto;
+  }
+
+  .arch-node {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .arch-arrow {
+    color: var(--text-muted);
+    font-size: 18px;
+    padding: 0 8px;
+    flex-shrink: 0;
+  }
+
+  /* Feature pills */
+  .pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .pill {
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: var(--surface2);
+  }
+
+  .pill.highlight {
+    background: rgba(0,229,255,0.05);
+    border-color: rgba(0,229,255,0.2);
+    color: var(--rank1);
+  }
+  .p2 .pill.highlight {
+    background: rgba(168,255,120,0.05);
+    border-color: rgba(168,255,120,0.2);
+    color: var(--rank2);
+  }
+  .p3 .pill.highlight {
+    background: rgba(255,107,53,0.05);
+    border-color: rgba(255,107,53,0.2);
+    color: var(--rank3);
+  }
+
+  /* Timeline / steps */
+  .timeline {
+    position: relative;
+    padding-left: 28px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: var(--border);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 18px;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: var(--bg);
+  }
+
+  .p1 .tl-item::before { border-color: var(--rank1); }
+  .p2 .tl-item::before { border-color: var(--rank2); }
+  .p3 .tl-item::before { border-color: var(--rank3); }
+
+  .tl-time {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 3px;
+  }
+
+  .tl-text {
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  .tl-text strong { color: var(--accent1); font-weight: 500; }
+  .p2 .tl-text strong { color: var(--rank2); }
+  .p3 .tl-text strong { color: var(--rank3); }
+
+  /* Code block */
+  .code-block {
+    background: #010409;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    font-size: 12px;
+    line-height: 1.7;
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+
+  .c-kw { color: #ff79c6; }
+  .c-fn { color: #50fa7b; }
+  .c-str { color: #f1fa8c; }
+  .c-cm { color: #6272a4; }
+  .c-var { color: #8be9fd; }
+  .c-num { color: #bd93f9; }
+
+  /* Wow factor box */
+  .wow-box {
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-top: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .p1 .wow-box { background: rgba(0,229,255,0.05); border: 1px solid rgba(0,229,255,0.15); }
+  .p2 .wow-box { background: rgba(168,255,120,0.05); border: 1px solid rgba(168,255,120,0.15); }
+  .p3 .wow-box { background: rgba(255,107,53,0.05); border: 1px solid rgba(255,107,53,0.15); }
+
+  .wow-icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+
+  .wow-content strong {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .p1 .wow-content strong { color: var(--rank1); }
+  .p2 .wow-content strong { color: var(--rank2); }
+  .p3 .wow-content strong { color: var(--rank3); }
+
+  .wow-content p { font-size: 12px; color: var(--text-muted); line-height: 1.6; }
+
+  /* Stack table */
+  .stack-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+
+  .stack-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+
+  .stack-layer {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .stack-tech {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  /* ── JUDGE TIPS ── */
+  .judge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+
+  .judge-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+  }
+
+  .judge-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .judge-tip-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .judge-tip-text {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+  }
+
+  .footer-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 8px 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .verdict-strip { grid-template-columns: 1fr; }
+    .card-header { flex-direction: column; }
+    .score-grid { min-width: auto; width: 100%; }
+    h1 { font-size: 36px; }
+  }
+
+  /* Fade-in animation on load */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .problem-card {
+    animation: fadeUp 0.5s ease forwards;
+  }
+  .problem-card:nth-child(1) { animation-delay: 0.1s; }
+  .problem-card:nth-child(2) { animation-delay: 0.2s; }
+  .problem-card:nth-child(3) { animation-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div class="container">
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="badge">IEEE SPS BMSIT · SPECTRE 2024</div>
+    <h1>
+      <div class="line1">Winning Strategy</div>
+      <div class="line2">Top 3 Problem Picks</div>
+    </h1>
+    <p class="header-sub">A tactical breakdown to help you win a 24-hour national hackathon</p>
+    <div class="timer-bar">24-HOUR HACKATHON · PRIORITIZE DEMO OVER PERFECTION</div>
+    <button class="sw3-button" onclick="window.location.href='sw3.html'">View SW-3 Blueprint</button>
+  </header>
+
+  <!-- ── QUICK VERDICT ── -->
+  <div class="section-header">
+    <span class="section-num">00</span>
+    <span class="section-title">Quick Verdict</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="verdict-strip">
+    <div class="verdict-card rank-1">
+      <div class="rank-badge">★ Top Pick · Best ROI</div>
+      <div class="verdict-id">SW-9</div>
+      <div class="verdict-name">DICOM Medical Image Communication Simulation</div>
+    </div>
+    <div class="verdict-card rank-2">
+      <div class="rank-badge">★★ Strong Pick · High Impact</div>
+      <div class="verdict-id">SW-6</div>
+      <div class="verdict-name">Reverse Engineering Malware on Embedded Devices</div>
+    </div>
+    <div class="verdict-card rank-3">
+      <div class="rank-badge">★★★ Bold Pick · High Ceiling</div>
+      <div class="verdict-id">SW-8</div>
+      <div class="verdict-name">Intelligent RF Spectrum Signal Classification</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════
+       PROBLEM 1: SW-9 DICOM
+  ══════════════════════════════════════════════════════ -->
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <span class="section-title">Problem Breakdown & Solutions</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="problem-card p1">
+    <div class="card-header">
+      <div class="card-header-left">
+        <span class="problem-id-tag">SW-9 · Top Pick</span>
+        <div class="card-title">DICOM Medical Image Communication</div>
+        <div class="card-tagline">Simulate a full CT/MRI → PACS pipeline with live error analytics</div>
+      </div>
+      <div class="score-grid">
+        <div class="score-item">
+          <span class="score-label">Feasibility</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:95%"></div></div>
+          <span class="score-val">9.5</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Wow Factor</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:90%"></div></div>
+          <span class="score-val">9.0</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Uniqueness</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:85%"></div></div>
+          <span class="score-val">8.5</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Domain Depth</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:90%"></div></div>
+          <span class="score-val">9.0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <div class="subsection">
+        <div class="subsection-title">Why This Wins</div>
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.7;">
+          DICOM is a real, mature standard used in every hospital on Earth. Judges from IEEE Signal Processing background will immediately recognize its complexity. Most teams will ignore this problem because "simulation" sounds boring — but a well-executed demo with a live dashboard showing real DICOM transfers, error states, and recovery is genuinely impressive. The library ecosystem (pydicom, pynetdicom) is mature and well-documented, meaning you spend time on engineering insight, not fighting undocumented APIs.
+        </p>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">System Architecture</div>
+        <div class="arch-flow">
+          <div class="arch-node">🖥️ CT/MRI Simulator<br><small style="color:var(--text-muted)">SCU (sender)</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">🔗 DICOM Association<br><small style="color:var(--text-muted)">C-STORE / C-ECHO</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">🗄️ PACS Server<br><small style="color:var(--text-muted)">SCP (receiver)</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">📊 Analytics Layer<br><small style="color:var(--text-muted)">Real-time metrics</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">🌐 Web Dashboard<br><small style="color:var(--text-muted)">Live monitoring UI</small></div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Core Features to Implement</div>
+        <div class="pill-group">
+          <span class="pill highlight">C-ECHO (DICOM ping)</span>
+          <span class="pill highlight">C-STORE (image push)</span>
+          <span class="pill highlight">C-FIND (query)</span>
+          <span class="pill">C-MOVE (retrieval)</span>
+          <span class="pill highlight">Association FSM</span>
+          <span class="pill">Multi-patient simulation</span>
+          <span class="pill highlight">Network fault injection</span>
+          <span class="pill">Corrupted image recovery</span>
+          <span class="pill highlight">Transfer syntax negotiation</span>
+          <span class="pill">Real DICOM .dcm files</span>
+          <span class="pill highlight">Live web dashboard</span>
+          <span class="pill">Performance benchmarks</span>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">24-Hour Build Timeline</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">Hour 0–2 · Setup</div>
+            <div class="tl-text">Install <strong>pydicom + pynetdicom</strong>. Download 10 real anonymized DICOM files from TCIA dataset (The Cancer Imaging Archive — free). Set up project skeleton: SCU module, SCP module, shared config.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 2–5 · Core Protocol</div>
+            <div class="tl-text">Implement <strong>C-ECHO</strong> (DICOM ping/handshake). Implement <strong>C-STORE</strong> (push images from SCU to SCP). Verify association negotiation with transfer syntax. Log all states to JSON.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 5–9 · Multi-Patient + Error Handling</div>
+            <div class="tl-text">Simulate 5 concurrent patient transfers. Inject <strong>network faults</strong> (packet loss, timeout, corruption). Implement auto-retry with exponential backoff. Track success/failure rates per patient and series.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 9–14 · Analytics + Dashboard</div>
+            <div class="tl-text">Build a <strong>real-time web dashboard</strong> (Flask + Socket.IO + Chart.js) showing live transfer progress, throughput (images/sec), error rates, association state machine diagram, and per-modality metrics. This is your WOW moment.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 14–18 · Advanced: C-FIND + JPEG 2000</div>
+            <div class="tl-text">Add <strong>C-FIND</strong> (query PACS by patient name / study date). Add JPEG 2000 lossless transfer syntax. Show image metadata extraction (patient ID, study UID, modality, slice thickness).</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 18–22 · Polish + Edge Cases</div>
+            <div class="tl-text">Test with large CT series (200+ slices). Handle <strong>partial transfer recovery</strong>. Add PDF report generation summarizing the session. Write 1-page technical document explaining the DICOM FSM states.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 22–24 · Demo Prep</div>
+            <div class="tl-text">Record a screen-capture video showing the dashboard live. Prepare a 3-slide deck: problem → architecture → live demo. Practice the 3-minute pitch.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Key Code Skeleton (pynetdicom)</div>
+        <div class="code-block">
+<span class="c-cm"># SCU (Imaging device — sender)</span>
+<span class="c-kw">from</span> <span class="c-var">pynetdicom</span> <span class="c-kw">import</span> AE, evt
+<span class="c-kw">from</span> <span class="c-var">pynetdicom.sop_class</span> <span class="c-kw">import</span> CTImageStorage
+<span class="c-kw">import</span> <span class="c-var">pydicom</span>
+
+<span class="c-kw">def</span> <span class="c-fn">send_dicom</span>(host, port, filepath):
+    ae = AE()
+    ae.add_requested_context(CTImageStorage)
+    assoc = ae.associate(host, port)           <span class="c-cm"># Association request</span>
+    <span class="c-kw">if</span> assoc.is_established:
+        ds = pydicom.dcmread(filepath)
+        status = assoc.send_c_store(ds)        <span class="c-cm"># C-STORE transfer</span>
+        log_status(status, filepath)
+        assoc.release()
+    <span class="c-kw">else</span>:
+        raise ConnectionError(<span class="c-str">"DICOM association failed"</span>)
+
+<span class="c-cm"># SCP (PACS server — receiver)</span>
+<span class="c-kw">def</span> <span class="c-fn">handle_store</span>(event):
+    ds = event.dataset
+    ds.file_meta = event.file_meta
+    ds.save_as(<span class="c-str">f"pacs/{ds.PatientID}_{ds.SOPInstanceUID}.dcm"</span>)
+    metrics.record_transfer(ds)               <span class="c-cm"># push to dashboard</span>
+    <span class="c-kw">return</span> <span class="c-num">0x0000</span>                            <span class="c-cm"># Success status</span>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Tech Stack</div>
+        <div class="stack-grid">
+          <div class="stack-item"><div class="stack-layer">DICOM Engine</div><div class="stack-tech">pydicom + pynetdicom</div></div>
+          <div class="stack-item"><div class="stack-layer">Backend API</div><div class="stack-tech">Python Flask / FastAPI</div></div>
+          <div class="stack-item"><div class="stack-layer">Real-time Push</div><div class="stack-tech">Socket.IO / WebSocket</div></div>
+          <div class="stack-item"><div class="stack-layer">Dashboard UI</div><div class="stack-tech">HTML + Chart.js / D3</div></div>
+          <div class="stack-item"><div class="stack-layer">Data Storage</div><div class="stack-tech">SQLite (transfer logs)</div></div>
+          <div class="stack-item"><div class="stack-layer">Simulation</div><div class="stack-tech">asyncio + threading</div></div>
+          <div class="stack-item"><div class="stack-layer">Test Data</div><div class="stack-tech">TCIA Dataset (free)</div></div>
+          <div class="stack-item"><div class="stack-layer">Report</div><div class="stack-tech">ReportLab / WeasyPrint</div></div>
+        </div>
+      </div>
+
+      <div class="wow-box">
+        <div class="wow-icon">💡</div>
+        <div class="wow-content">
+          <strong>The Judge "Wow" Moment</strong>
+          <p>Run a live demo where you artificially introduce 30% packet loss mid-transfer. Show the dashboard detecting it in real-time, the system auto-retrying, and all images eventually landing correctly in the PACS receiver. Then show the analytics summary. This demonstrates real fault tolerance, not just a "working" demo.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       PROBLEM 2: SW-6 MALWARE
+  ══════════════════════════════════════════════════════ -->
+
+  <div class="problem-card p2">
+    <div class="card-header">
+      <div class="card-header-left">
+        <span class="problem-id-tag">SW-6 · Strong Pick</span>
+        <div class="card-title">Reverse Engineering Malware on Embedded Devices</div>
+        <div class="card-tagline">Analyze a real malicious firmware — document and build a detection tool</div>
+      </div>
+      <div class="score-grid">
+        <div class="score-item">
+          <span class="score-label">Feasibility</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:80%"></div></div>
+          <span class="score-val">8.0</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Wow Factor</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:95%"></div></div>
+          <span class="score-val">9.5</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Uniqueness</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:92%"></div></div>
+          <span class="score-val">9.2</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Domain Depth</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:90%"></div></div>
+          <span class="score-val">9.0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <div class="subsection">
+        <div class="subsection-title">Why This Wins</div>
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.7;">
+          Embedded security is one of the hottest fields in 2024. A well-structured reverse engineering report + automated detection tool is a combination that's extremely hard to fake — judges can verify your work. The best approach: use a publicly available malicious firmware sample (e.g., Mirai botnet source code, which is open-source, or modified QEMU images), analyze it with Ghidra/Binwalk, and present a clear technical breakdown plus an automated scanner. This is high-skill, low-library-dependency work that showcases real engineering ability.
+        </p>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">System Architecture</div>
+        <div class="arch-flow">
+          <div class="arch-node">📦 Firmware Sample<br><small style="color:var(--text-muted)">Binary / ELF / RTOS</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">🔬 Static Analysis<br><small style="color:var(--text-muted)">Binwalk + Ghidra</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">⚡ Dynamic Analysis<br><small style="color:var(--text-muted)">QEMU + GDB</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">🧠 Behavior Mapping<br><small style="color:var(--text-muted)">IOC extraction</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">🛡️ Detection Tool<br><small style="color:var(--text-muted)">Automated scanner</small></div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">What to Analyze (Sample Strategy)</div>
+        <div class="pill-group">
+          <span class="pill highlight">Mirai botnet firmware (open-source)</span>
+          <span class="pill highlight">Hardcoded credential check bypass</span>
+          <span class="pill highlight">C&C beacon identification</span>
+          <span class="pill">Persistence via flash write</span>
+          <span class="pill highlight">Suspicious syscall patterns</span>
+          <span class="pill">UART debug interface exploit</span>
+          <span class="pill highlight">Telnet backdoor</span>
+          <span class="pill">DDoS flood function</span>
+          <span class="pill highlight">Entropy analysis (packed sections)</span>
+          <span class="pill">Cross-reference table reconstruction</span>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">24-Hour Build Timeline</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">Hour 0–2 · Environment Setup</div>
+            <div class="tl-text">Install <strong>Binwalk, Ghidra, QEMU, radare2</strong>. Select firmware: Mirai source → cross-compile for ARM MIPS. Set up QEMU MIPS emulation for dynamic analysis. Create isolated analysis VM.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 2–6 · Static Analysis</div>
+            <div class="tl-text">Run Binwalk to <strong>extract filesystem layers</strong>. Use Ghidra to disassemble and decompile key functions. Identify: credential scanning routines, obfuscated strings (XOR/ROT), hardcoded IPs (C&C servers), and suspicious library imports.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 6–10 · Dynamic Analysis</div>
+            <div class="tl-text">Emulate in <strong>QEMU + GDB</strong>. Capture network traffic with tcpdump. Observe actual C&C beacon timing (usually 30s intervals). Trace syscalls. Document the exact execution flow from boot to malicious payload activation.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 10–15 · Detection Tool</div>
+            <div class="tl-text">Build a <strong>Python-based static firmware scanner</strong> that: extracts strings, detects entropy anomalies (packed/encrypted sections > 7.0 entropy), matches known malicious patterns (Mirai IOC signatures), checks for default credential lookups, and flags suspicious function patterns. Output a structured JSON + HTML report.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 15–20 · Technical Report</div>
+            <div class="tl-text">Write a structured malware <strong>analysis report</strong>: executive summary, TTP mapping to MITRE ATT&CK for ICS framework, annotated disassembly screenshots, C&C protocol reverse-engineered, remediation steps. This document alone will impress judges enormously.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 20–24 · Demo + Visualization</div>
+            <div class="tl-text">Create a <strong>call graph visualization</strong> of malicious function chains (networkx + matplotlib). Show the scanner running on a clean vs infected firmware. Highlight detection capability. Prepare live terminal demo.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Key Code: Automated Scanner</div>
+        <div class="code-block">
+<span class="c-kw">import</span> <span class="c-var">math, re, json</span>
+<span class="c-kw">from</span> <span class="c-var">pathlib</span> <span class="c-kw">import</span> Path
+
+<span class="c-cm"># Suspicious strings from known Mirai IOCs</span>
+MALWARE_SIGNATURES = [
+    <span class="c-str">b"/bin/busybox"</span>, <span class="c-str">b"GET /shell"</span>,
+    <span class="c-str">b"telnet"</span>, <span class="c-str">b"wget http"</span>,
+    <span class="c-str">b"root:xc3511"</span>   <span class="c-cm"># Mirai default cred</span>
+]
+
+<span class="c-kw">def</span> <span class="c-fn">entropy</span>(data):
+    <span class="c-kw">if not</span> data: <span class="c-kw">return</span> <span class="c-num">0</span>
+    freq = [data.count(b) / len(data) <span class="c-kw">for</span> b <span class="c-kw">in</span> set(data)]
+    <span class="c-kw">return</span> -sum(p * math.log2(p) <span class="c-kw">for</span> p <span class="c-kw">in</span> freq)
+
+<span class="c-kw">def</span> <span class="c-fn">scan_firmware</span>(path):
+    data = Path(path).read_bytes()
+    results = {
+        <span class="c-str">"entropy"</span>: entropy(data),
+        <span class="c-str">"packed"</span>: entropy(data) > <span class="c-num">7.0</span>,
+        <span class="c-str">"ioc_hits"</span>: [s <span class="c-kw">for</span> s <span class="c-kw">in</span> MALWARE_SIGNATURES
+                      <span class="c-kw">if</span> s <span class="c-kw">in</span> data],
+        <span class="c-str">"suspicious_ips"</span>: re.findall(
+            <span class="c-str">rb'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}'</span>, data)
+    }
+    results[<span class="c-str">"verdict"</span>] = <span class="c-str">"MALICIOUS"</span> <span class="c-kw">if</span> results[<span class="c-str">"ioc_hits"</span>] <span class="c-kw">else</span> <span class="c-str">"CLEAN"</span>
+    <span class="c-kw">return</span> results
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Tech Stack</div>
+        <div class="stack-grid">
+          <div class="stack-item"><div class="stack-layer">Extraction</div><div class="stack-tech">Binwalk + Jefferson</div></div>
+          <div class="stack-item"><div class="stack-layer">Disassembly</div><div class="stack-tech">Ghidra / Radare2</div></div>
+          <div class="stack-item"><div class="stack-layer">Emulation</div><div class="stack-tech">QEMU (ARM/MIPS)</div></div>
+          <div class="stack-item"><div class="stack-layer">Dynamic Trace</div><div class="stack-tech">GDB + strace</div></div>
+          <div class="stack-item"><div class="stack-layer">Scanner Tool</div><div class="stack-tech">Python 3 + pwntools</div></div>
+          <div class="stack-item"><div class="stack-layer">Visualization</div><div class="stack-tech">networkx + matplotlib</div></div>
+          <div class="stack-item"><div class="stack-layer">Reporting</div><div class="stack-tech">Jinja2 HTML report</div></div>
+          <div class="stack-item"><div class="stack-layer">Threat Intel</div><div class="stack-tech">MITRE ATT&CK for ICS</div></div>
+        </div>
+      </div>
+
+      <div class="wow-box">
+        <div class="wow-icon">💡</div>
+        <div class="wow-content">
+          <strong>The Judge "Wow" Moment</strong>
+          <p>Show the scanner running against two firmware binaries in real-time — one clean, one infected. The scanner outputs a color-coded HTML report flagging exact byte offsets of IOCs, entropy graphs showing the packed section, and a reconstructed C&C protocol. Then show the call graph visualization revealing the malicious function chain from boot → credential scan → C&C beacon → DDoS flood. Few teams will produce something this structured and technical.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       PROBLEM 3: SW-8 RF CLASSIFICATION
+  ══════════════════════════════════════════════════════ -->
+
+  <div class="problem-card p3">
+    <div class="card-header">
+      <div class="card-header-left">
+        <span class="problem-id-tag">SW-8 · Bold Pick</span>
+        <div class="card-title">RF Spectrum Signal Classification</div>
+        <div class="card-tagline">Hybrid DSP + ML system that classifies modulation schemes from raw I/Q samples</div>
+      </div>
+      <div class="score-grid">
+        <div class="score-item">
+          <span class="score-label">Feasibility</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:78%"></div></div>
+          <span class="score-val">7.8</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Wow Factor</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:88%"></div></div>
+          <span class="score-val">8.8</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Uniqueness</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:85%"></div></div>
+          <span class="score-val">8.5</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Domain Depth</span>
+          <div class="score-bar-wrap"><div class="score-bar" style="width:92%"></div></div>
+          <span class="score-val">9.2</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card-body">
+
+      <div class="subsection">
+        <div class="subsection-title">Why This Wins</div>
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.7;">
+          This is an IEEE Signal Processing Society hackathon. RF classification is their home domain — judges will have deep expertise and respect work done here. The key advantage: the <strong>RadioML 2016 dataset</strong> is free, well-curated, and contains exactly the signals needed (AM, FM, PSK, QAM, OFDM across 20 SNR levels). You're not building from scratch — you're building a clever hybrid system. A team that combines classical features (instantaneous frequency, cyclostationary features) with a CNN/LSTM will score very high on domain depth.
+        </p>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">System Architecture</div>
+        <div class="arch-flow">
+          <div class="arch-node">📡 I/Q Samples<br><small style="color:var(--text-muted)">RadioML dataset</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">⚙️ DSP Features<br><small style="color:var(--text-muted)">FFT, AMR, Cumulants</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">🧠 CNN/LSTM Model<br><small style="color:var(--text-muted)">Raw + features</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">🔀 Ensemble Fusion<br><small style="color:var(--text-muted)">Confidence weighting</small></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">📊 Real-time UI<br><small style="color:var(--text-muted)">Live classification</small></div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Feature Engineering (Classical DSP)</div>
+        <div class="pill-group">
+          <span class="pill highlight">Instantaneous amplitude variance (σ²_aa)</span>
+          <span class="pill highlight">Instantaneous frequency deviation (σ²_af)</span>
+          <span class="pill">Spectral symmetry ratio</span>
+          <span class="pill highlight">4th-order cumulants (C42, C40)</span>
+          <span class="pill highlight">Constellation diagram features</span>
+          <span class="pill">Cyclostationary spectral density</span>
+          <span class="pill highlight">FFT peak-to-average ratio</span>
+          <span class="pill">Phase histogram entropy</span>
+          <span class="pill highlight">Zero-crossing rate</span>
+          <span class="pill">Bandwidth estimation</span>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">24-Hour Build Timeline</div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-time">Hour 0–2 · Data + Setup</div>
+            <div class="tl-text">Download <strong>RadioML 2016.10A dataset</strong> (HDF5 format, ~500MB). Load with h5py. Visualize 5 signal types in time domain and constellation plots. Set up PyTorch + scikit-learn environment.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 2–6 · DSP Feature Pipeline</div>
+            <div class="tl-text">Implement classical feature extraction: <strong>instantaneous amplitude/frequency/phase</strong>, higher-order cumulants (C40, C41, C42), FFT features. These alone with a random forest give 75–80% accuracy — your baseline to beat.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 6–12 · CNN Model</div>
+            <div class="tl-text">Build a <strong>lightweight 1D CNN</strong> on raw I/Q samples. Architecture: 3× Conv1D → BatchNorm → ReLU → MaxPool → 2× Dense → Softmax. Train for 30 epochs. Should achieve ~90%+ at high SNR. Evaluate per-class confusion matrix.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 12–16 · Hybrid Ensemble</div>
+            <div class="tl-text">Fuse CNN predictions + DSP features via <strong>confidence-weighted ensemble</strong>: at high SNR, trust CNN more; at low SNR (&lt;0dB), trust DSP cumulant features more. This adaptive weighting is the key differentiator — show accuracy vs SNR curve improvement.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 16–20 · Live Demo UI</div>
+            <div class="tl-text">Build a <strong>real-time visualization dashboard</strong>: feed samples continuously, show live spectrogram, constellation diagram, and classification confidence bar. Simulate different SNR environments. Show the model correctly classifying even at −10dB SNR.</div>
+          </div>
+          <div class="tl-item">
+            <div class="tl-time">Hour 20–24 · Analysis + Report</div>
+            <div class="tl-text">Generate: accuracy vs SNR curves for all 11 modulation types, per-class precision/recall, confusion matrix heatmap, FLOPS comparison (CNN-only vs hybrid). Write 1-page analysis of where each feature type contributes most.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Key Code: Hybrid Classification</div>
+        <div class="code-block">
+<span class="c-kw">import</span> <span class="c-var">numpy as np</span>
+<span class="c-kw">import</span> <span class="c-var">torch</span>
+
+<span class="c-kw">def</span> <span class="c-fn">extract_dsp_features</span>(iq):
+    I, Q = iq[<span class="c-num">0</span>], iq[<span class="c-num">1</span>]
+    A = np.sqrt(I**<span class="c-num">2</span> + Q**<span class="c-num">2</span>)         <span class="c-cm"># Instantaneous amplitude</span>
+    phi = np.arctan2(Q, I)               <span class="c-cm"># Instantaneous phase</span>
+    f_inst = np.diff(np.unwrap(phi))     <span class="c-cm"># Instantaneous frequency</span>
+    <span class="c-kw">return</span> np.array([
+        np.var(A) / np.mean(A)**<span class="c-num">2</span>,      <span class="c-cm"># σ²_aa (key AMR feature)</span>
+        np.var(f_inst),                  <span class="c-cm"># σ²_af (FM discriminator)</span>
+        np.mean(A**<span class="c-num">4</span>) / np.mean(A**<span class="c-num">2</span>)**<span class="c-num">2</span>,  <span class="c-cm"># 4th order moment</span>
+        np.std(phi),                     <span class="c-cm"># Phase spread</span>
+    ])
+
+<span class="c-kw">def</span> <span class="c-fn">hybrid_classify</span>(iq_sample, snr_db, cnn_model, rf_model):
+    dsp_feat = extract_dsp_features(iq_sample)
+    cnn_prob = cnn_model(torch.tensor(iq_sample).unsqueeze(<span class="c-num">0</span>))
+    rf_prob  = rf_model.predict_proba([dsp_feat])[<span class="c-num">0</span>]
+    <span class="c-cm"># Adaptive weighting: CNN dominates at high SNR</span>
+    w_cnn = np.clip((snr_db + <span class="c-num">10</span>) / <span class="c-num">20</span>, <span class="c-num">0.2</span>, <span class="c-num">0.9</span>)
+    fused = w_cnn * cnn_prob.detach().numpy() + (<span class="c-num">1</span>-w_cnn) * rf_prob
+    <span class="c-kw">return</span> CLASSES[np.argmax(fused)], np.max(fused)
+        </div>
+      </div>
+
+      <div class="subsection">
+        <div class="subsection-title">Tech Stack</div>
+        <div class="stack-grid">
+          <div class="stack-item"><div class="stack-layer">Dataset</div><div class="stack-tech">RadioML 2016.10A (HDF5)</div></div>
+          <div class="stack-item"><div class="stack-layer">Deep Learning</div><div class="stack-tech">PyTorch (1D CNN)</div></div>
+          <div class="stack-item"><div class="stack-layer">Classical ML</div><div class="stack-tech">scikit-learn RF/XGBoost</div></div>
+          <div class="stack-item"><div class="stack-layer">DSP</div><div class="stack-tech">NumPy + SciPy</div></div>
+          <div class="stack-item"><div class="stack-layer">Visualization</div><div class="stack-tech">Matplotlib + Plotly</div></div>
+          <div class="stack-item"><div class="stack-layer">Live UI</div><div class="stack-tech">Streamlit / Gradio</div></div>
+          <div class="stack-item"><div class="stack-layer">SDR (bonus)</div><div class="stack-tech">GNU Radio / RTL-SDR</div></div>
+          <div class="stack-item"><div class="stack-layer">Data Loading</div><div class="stack-tech">h5py + PyTorch Dataset</div></div>
+        </div>
+      </div>
+
+      <div class="wow-box">
+        <div class="wow-icon">💡</div>
+        <div class="wow-content">
+          <strong>The Judge "Wow" Moment</strong>
+          <p>Show an accuracy-vs-SNR curve where your hybrid model outperforms both the CNN alone and the DSP-only classifier, especially in the critical −2dB to +4dB regime. Then if you have an RTL-SDR dongle (₹2000, widely available), classify actual FM radio, WiFi, and Bluetooth signals live. Hearing "FM radio detected with 97% confidence" from a real antenna is unforgettable. Even without SDR hardware, the adaptive ensemble results will impress any IEEE Signal Processing judge.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ── JUDGE TIPS ── -->
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <span class="section-title">Universal Winning Tactics</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="judge-grid">
+    <div class="judge-card">
+      <div class="judge-num">01</div>
+      <div class="judge-tip-title">Demo > Code</div>
+      <div class="judge-tip-text">Judges watch demos for 3 minutes, not code for 30. Invest 4 hours in a polished, live demo that tells a story. A beautiful working demo beats elegant unfinished code every time.</div>
+    </div>
+    <div class="judge-card">
+      <div class="judge-num">02</div>
+      <div class="judge-tip-title">Quantify Everything</div>
+      <div class="judge-tip-text">Every claim must have a number. "Our system achieves 94.2% accuracy at 0dB SNR" is infinitely stronger than "our system works well in noisy conditions." Print metric tables.</div>
+    </div>
+    <div class="judge-card">
+      <div class="judge-num">03</div>
+      <div class="judge-tip-title">Show Failure Modes</div>
+      <div class="judge-tip-text">Proactively acknowledge where your system fails and why. This signals maturity. Teams that say "it works perfectly" are instantly less credible than those who say "at −12dB SNR, QAM-64 and QAM-256 are confused."</div>
+    </div>
+    <div class="judge-card">
+      <div class="judge-num">04</div>
+      <div class="judge-tip-title">Real Data Only</div>
+      <div class="judge-tip-text">Never use synthetic test cases you generated yourself. Use RadioML, TCIA DICOM files, or actual malware samples. Judges know the difference immediately.</div>
+    </div>
+    <div class="judge-card">
+      <div class="judge-num">05</div>
+      <div class="judge-tip-title">One Killer Slide</div>
+      <div class="judge-tip-text">Design ONE slide with a single compelling visual — a confusion matrix, an accuracy-vs-SNR curve, a transfer dashboard — that stands alone and makes your entire project's value obvious without words.</div>
+    </div>
+    <div class="judge-card">
+      <div class="judge-num">06</div>
+      <div class="judge-tip-title">Split Roles Clearly</div>
+      <div class="judge-tip-text">Assign roles at hour 0: 1 person owns the ML/core algorithm, 1 owns the UI/demo, 1 owns the technical report/presentation. Never have everyone debugging the same thing simultaneously.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-logo">SPECTRE · IEEE SPS BMSIT</div>
+    <div>SW-9 · SW-6 · SW-8 — Strategic Selection for Maximum Win Probability</div>
+    <div style="margin-top:8px; color:#444;">Build something real. Ship it clean. Demo it fearlessly.</div>
+  </div>
+</footer>
+
+</body>
+</html>
